@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ad;
+use App\Form\AnnonceType;
 use App\Repository\AdRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,20 +34,29 @@ class AdController extends AbstractController
     public function create(){
 
         $ad = new Ad();
+        /*
         $form = $this->createFormBuilder($ad)
-                    ->add('title')
+                    ->add('title', TextType::class, [
+                        "label" => "mon titre",
+                        "attr" => [
+                            "class" => "test"
+                        ]
+                    ])
                     ->add('introduction')
                     ->add('content')
                     ->add('rooms')
                     ->add('price')
                     ->getForm();
-
-
+                    return $this->render("ad/new.html.twig",[
+                        'myForm' => $form->createView()
+                    ]);
+             
+        */
+        $form = $this->createForm(AnnonceType::class, $ad);
         return $this->render("ad/new.html.twig",[
-            'form' => $form->createView()
+            'myForm' => $form->createView()
         ]);
     }
-
 
     /**
      * Permet d'afficher une seule annonce
