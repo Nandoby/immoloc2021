@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Ad;
 use App\Form\AnnonceType;
 use App\Repository\AdRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,28 +33,35 @@ class AdController extends AbstractController
      * @Route("/ads/new", name="ads_create")
      * @return void
      */
-    public function create(){
+    public function create(Request $request, EntityManagerInterface $manager){
 
         $ad = new Ad();
-        /*
-        $form = $this->createFormBuilder($ad)
-                    ->add('title', TextType::class, [
-                        "label" => "mon titre",
-                        "attr" => [
-                            "class" => "test"
-                        ]
-                    ])
-                    ->add('introduction')
-                    ->add('content')
-                    ->add('rooms')
-                    ->add('price')
-                    ->getForm();
-                    return $this->render("ad/new.html.twig",[
-                        'myForm' => $form->createView()
-                    ]);
-             
-        */
+        //$title = $request->request->get('annonce');
+        // dump($title);
         $form = $this->createForm(AnnonceType::class, $ad);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            //dump($title);
+            //dump($ad);
+            $manager->persist($ad);
+            //dump($ad);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "L'annonce <strong>{$ad->getTitle()}</strong> a bien été enregistrée! "
+            );
+   
+            return $this->redirectToRoute('ads_show',[
+                'slug' => $ad->getSlug()
+            ]);
+
+        }
+
+
+
         return $this->render("ad/new.html.twig",[
             'myForm' => $form->createView()
         ]);

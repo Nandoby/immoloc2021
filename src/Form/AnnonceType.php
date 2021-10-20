@@ -42,9 +42,9 @@ class AnnonceType extends AbstractType
                     'placeholder'=>'titre de votre annonce'
                 ]
             ])
-            ->add('slug', TextType::class, $this->getConfiguration('Slug','Adresse web (automatique'),[
+            ->add('slug', TextType::class, $this->getConfiguration('Slug','Adresse web (automatique',[
                 'required' => false
-            ])
+            ]))
             ->add('coverImage', UrlType::class, $this->getConfiguration("Url de l'image", "Donnez l'adresse de votre image"))
             ->add('introduction', TextType::class, $this->getConfiguration("Introduction", "Donnez une description globale de votre annonce"))
             ->add('content', TextareaType::class, $this->getConfiguration("Description détaillée", "Donnez une description de votre bien"))
