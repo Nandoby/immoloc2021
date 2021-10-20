@@ -2,50 +2,18 @@
 
 {% block title %}Création d'une annonce{% endblock %}
 
-{% form_theme myForm _self %}
-
+{#
+    {% form_theme myForm 'bootstrap_5_layout.html.twig' %}
+#}
 {% block body %}
     <div class="container">
         <h1>Création d'une nouvelle annonce</h1>
 
         {{ form_start(myForm) }}
-
-               {# 
-                 <div class="container">
-                    <div>
-                
-                        {{form_row(form.title)}}
-                
-                    </div>
-                </div>
-              #}
             {{form_widget(myForm)}}
-
-
             <button type="submit" class="btn btn-primary mt-3">Création d'une annonce</button>
         {{ form_end(myForm) }}
-
-    </div>
-{% endblock %}
-
-{% block form_row %}
-{#
-    {{ dump() }}
-#}
-    <div class="form-group">
-        <div class="row">
-            <div class="col-6">
-                {{ form_label(form) }}
-            </div>
-            <div class="col-6">
-               {#  {{ form_widget(form, {'attr':{'class':'form-control'}}) }} #}
-               {{form_widget(form)}}
-            </div>
-        </div>
     </div>
 {% endblock %}
 
 
-{% block text_widget %}
-    <input type="text" name="{{full_name}}" id="{{id}}" class="form-control">
-{% endblock %}
