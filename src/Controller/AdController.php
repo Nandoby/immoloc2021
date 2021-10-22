@@ -39,7 +39,7 @@ class AdController extends AbstractController
         $ad = new Ad();
         //$title = $request->request->get('annonce');
         // dump($title);
-
+        /*
         $image1 = new Image();
         $image1->setUrl('http://placehold.it/400x200')
             ->setCaption('Titre 1');
@@ -51,17 +51,20 @@ class AdController extends AbstractController
             ->setCaption('Titre 2');
 
         $ad->addImage($image2);    
-
+        */
 
         $form = $this->createForm(AnnonceType::class, $ad);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            //dump($title);
-            //dump($ad);
+            //gestion des images
+            foreach($ad->getImages() as $image){
+                $image->setAd($ad);
+                $manager->persist($image);
+            }
+
             $manager->persist($ad);
-            //dump($ad);
             $manager->flush();
 
             $this->addFlash(
