@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
+use App\Entity\UserImgModify;
+use App\Form\ImgModifyType;
 use App\Form\RegistrationType;
 use App\Form\PasswordUpdateType;
 use Symfony\Component\Form\FormError;
@@ -174,6 +176,63 @@ class AccountController extends AbstractController
             'myForm'=>$form->createView()
         ]);
 
+
+    }
+
+    /**
+     * Permet de modifier l'avatar de l'utilisateur
+     * @Route("/account/imgmodify", name="account_modifimg")
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    public function imgModify(Request $request, EntityManagerInterface $manager)
+    {
+        $imgModify = new UserImgModify();
+        $user = $this->getUser();
+        $form = $this->createForm(ImgModifyType::class, $imgModify);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // Permet de supprimer l'image dans le dossier 
+            // gestion de la non obligation de l'image
+            if(!empty($user->getPicture()))
+            {
+                unlink($this->getParameter('uploads_directory').'/'.$user->getPicture());
+            }
+
+            $file = $form['newPicture']->getData();
+            if(!empty($file))
+            {
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',$originalFilename);
+                $newFilename = $safeFilename."-".uniqid().".".$file->guessExtension();
+                try{
+                    $file->move(
+                        $this->getParameter('uploads_directory'),
+                        $newFilename
+                    );
+                }catch(FileException $e){
+                    return $e->getMessage();
+                }
+                $user->setPicture($newFilename);
+            }
+
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre avatar a bien été modifié'
+            );
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        return $this->render("account/imgModify.html.twig",[
+            'myForm' => $form->createView()
+        ]);
 
     }
 
