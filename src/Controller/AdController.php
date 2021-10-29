@@ -32,7 +32,7 @@ class AdController extends AbstractController
     /**
      * Permet de créer une annonce
      * @Route("/ads/new", name="ads_create")
-     * @return void
+     * @return Response
      */
     public function create(Request $request, EntityManagerInterface $manager){
 
@@ -63,6 +63,9 @@ class AdController extends AbstractController
                 $image->setAd($ad);
                 $manager->persist($image);
             }
+
+            // on ajoute l'auteur mais attention risque de bug jusqu'a security
+            $ad->setAuthor($this->getUser());
 
             $manager->persist($ad);
             $manager->flush();

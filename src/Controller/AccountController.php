@@ -135,6 +135,9 @@ class AccountController extends AbstractController
                 'success',
                 "Les données ont été enregistrées avec succès"
             );
+
+           return $this->redirectToRoute('account_index');
+
         }
 
         return $this->render("account/profile.html.twig",[
@@ -180,7 +183,7 @@ class AccountController extends AbstractController
                     'Votre mot de passe a bien été modifié'
                 );
 
-                return $this->redirectToRoute('homepage');
+                return $this->redirectToRoute('account_index');
 
             }
         }
@@ -240,12 +243,38 @@ class AccountController extends AbstractController
                 'Votre avatar a bien été modifié'
             );
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('account_index');
         }
 
         return $this->render("account/imgModify.html.twig",[
             'myForm' => $form->createView()
         ]);
+
+    }
+
+    /**
+     * Permet de supprimer l'image de l'utilisateur
+     * @Route("/account/delimg", name="account_delimg")
+     *
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    public function removeImg(EntityManagerInterface $manager)
+    {
+        $user = $this->getUser();
+        if(!empty($user->getPicture()))
+        {
+            unlink($this->getParameter('uploads_directory').'/'.$user->getPicture());
+            $user->setPicture('');
+            $manager->persist($user);
+            $manager->flush();
+            $this->addFlash(
+                'success',
+                'Votre avatar a bien été supprimé'
+            );
+        }
+
+        return $this->redirectToRoute('account_index');
 
     }
 
