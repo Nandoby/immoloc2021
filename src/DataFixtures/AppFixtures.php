@@ -28,6 +28,18 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
         $slugify = new Slugify();
 
+        // création d'un admin
+        $admin = new User();
+        $admin->setFirstName('Jordan')
+            ->setLastName('Berti')
+            ->setEmail('berti@epse.be')
+            ->setPassword($this->passwordHasher->hashPassword($admin,'password'))
+            ->setIntroduction($faker->sentence())
+            ->setDescription('<p>'.join('</p><p>',$faker->paragraphs(3)).'</p>')
+            ->setRoles(['ROLE_ADMIN']);
+
+        $manager->persist($admin);
+
         //gestion des utilisateur 
         $users = []; // initialisation d'un tableau pour récup des user pour les Ad
         $genres = ['male','femelle'];

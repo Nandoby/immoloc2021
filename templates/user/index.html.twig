@@ -12,9 +12,9 @@
                     <img src="http://placehold.it/300x300" alt="Avatar de {{user.fullName}}" class="avatar mb-3">
                 {% endif %}
                 <br>
-                 <button type="button" class="btn btn-primary">
-                    Annonce(s) <span class="badge badge-secondary">{{user.ads | length }}</span>
-                </button>
+               
+                     <span class="badge bg-primary">Annonce(s) {{user.ads | length }}</span>
+               
             </div>
             <div class="col-9">
                 <h1>{{user.fullName}}</h1>

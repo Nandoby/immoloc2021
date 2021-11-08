@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(
  *  fields={"email"},
  *  message="Un autre utilisateur possède déjà cette e-mail, merci de la modifier"
