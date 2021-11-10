@@ -6,6 +6,7 @@ use App\Entity\Ad;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Image;
+use App\Entity\Booking;
 use Cocur\Slugify\Slugify;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -96,6 +97,29 @@ class AppFixtures extends Fixture
                     ->setCaption($faker->sentence())
                     ->setAd($ad);
                 $manager->persist($image);    
+            }
+
+            //gestion des réservation 
+            for($b=1; $b<=rand(0,10);$b++)
+            {
+                $booking = new Booking();
+                $createdAt = $faker->dateTimeBetween('-6 months','-4 months');
+                $startDate = $faker->dateTimeBetween('-3 months');
+                $duration = rand(3,10);
+                // startDate est maintenant un objet DateTime
+                $endDate = (clone $startDate)->modify("+$duration days");
+                $amount = $ad->getPrice() * $duration;
+                $comment = $faker->paragraph();
+                $booker = $users[rand(0,count($users)-1)];
+
+                $booking->setBooker($booker)
+                    ->setAd($ad)
+                    ->setStartDate($startDate)
+                    ->setEndDate($endDate)
+                    ->setCreatedAt($createdAt)
+                    ->setAmount($amount)
+                    ->setComment($comment);
+                $manager->persist($booking);
             }
 
         }
