@@ -41,9 +41,32 @@ class AdminBookingController extends AbstractController
         ]);
         $form->handleRequest($request);
         // vérif et enregristrement
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $booking->setAmount(0); // 0 = empty -> donc la fonction dans le PrePersist de l'entity Booking va s'activer.
+
+            $manager->persist($booking); /* pas obligatoire parce que le booking est déjà créé */
+            $manager->flush();
+            $this->addFlash(
+                'success',
+                "La réservation n°<strong>{$booking->getId()}</strong> a bien été modifiée"
+            );
+        }
         return $this->render("admin/booking/edit.html.twig",[
             "booking"=>$booking,
             "myForm"=>$form->createView()
         ]);
+    }
+
+    /**
+     * Permet de supprimer une réservation
+     * @Route("/admin/bookings/{id}/delete", name="admin_booking_delete")
+     * @param Booking $booking
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    public function delete(Booking $booking, EntityManagerInterface $manager)
+    {
+
     }
 }
