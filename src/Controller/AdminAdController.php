@@ -17,21 +17,17 @@ class AdminAdController extends AbstractController
     /**
      * Permet d'afficher l'ensemble des annonces dans l'administration
      * @Route("/admin/ads/{page<\d+>?1}", name="admin_ads_index")
-     * @param AdRepository $repo
+     * @param PaginationService $pagination
+     * @param int $page
      * @return Response
      */
     public function index(PaginationService $pagination, $page): Response
     {
         $pagination->setEntityClass(Ad::class)
                 ->setPage($page)
-                ->setLimit(10);
-
-        // return $this->render('admin/ad/index.html.twig', [
-        //     'ads' => $pagination->getData(),
-        //     'pages' => $pagination->getPages(),
-        //     'page' => $page
-        // ]);
-        
+                ->setLimit(10)
+                ->setRoute('admin_ads_index');
+   
         return $this->render('admin/ad/index.html.twig', [
             'pagination' => $pagination
         ]);

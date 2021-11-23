@@ -18,7 +18,8 @@ class AdminCommentController extends AbstractController
     /**
      * Permet d'administrer la liste des commentaires du site
      *  @Route("/admin/comments/{page<\d+>?1}", name="admin_comments_index")
-     * @param CommentRepository $repo
+     * @param PaginationService $pagination
+     * @param int $page
      * @return Response
      */
     public function index($page, PaginationService $pagination): Response
