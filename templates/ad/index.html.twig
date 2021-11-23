@@ -5,9 +5,10 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            {% for ad in ads %}
+            {% for ad in pagination.data %}
                {% include 'ad/_ad.html.twig'%}
             {% endfor %}
         </div>
+        {{pagination.display()}}
     </div>
 {% endblock %}
