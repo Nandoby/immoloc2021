@@ -2,7 +2,7 @@ main{
     min-height: 70vh;
 }
 
-.container{
+.container, .container-fluid{
     margin-top: 20px;
 }
 
